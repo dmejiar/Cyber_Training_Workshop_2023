@@ -1,0 +1,183 @@
+REKS Input
+
+To start a REKS/SSR calculation the pre-optimized egenvectors (orbitals) need to be supplied. The user is strongly advised not to use the default GAMESS orbital guess. The initial orbitals can be optimized, \textit{e.g.}, during an RHF (or RKS) single-point calculation. The standard mechanism of reading the guess orbitals (guess=moread) is used.
+
+The REKS/SSR calculation is invoked by setting scftyp=reks in the \$contrl section. The REKS/SSR calculation is controlled by the following keywords, which should occur in the \$REKS section of the input; the \$REKS section is terminated by the \$END keyword.
+
+ rexType   = 0.....SA-REKS(2,2); default
+             1.....SSR(2,2) = 2SI-2SA-REKS(2,2)
+             2.....SSR(3,2) = 3SI-2SA-REKS(2,2)
+
+ rexTarget = 0.....the averaged state of SA-REKS; default
+             1.....either PPS (of SA) or S0 (of SSR)
+             2.....either OSS or S1
+
+ WPPS      = float.....weighting factor of the PPS state in the SA-REKS(2,2) ensemble (0.5<=WPPS<=1.0); default = 0.5
+
+These keywords control the state to be calculated. If WPPS is set to 1.0 exactly, then a single state (not SA-REKS) REKS calculation will be performed. The analytical gradient, the (relaxed) density matrix, and (optional) the IPs or EAs are calculated for the target state selected by the rexTarget keyword.
+
+The following keywords control the REKS SCF cycles. 
+
+ rexShift  = float.....orbital level shift used in SA-REKS calculation; default = 0.0
+ 
+ rexDIIS   = yes/no....to do or not to do DIIS with REKS; default = yes
+
+This keyword can be used to localize (or delocalize) the REKS active orbitals on a specific atom (group of atoms). It is useful for experts, when they know what they are doing.
+
+ rexLdL    = 0.....do nothing; default
+             1.....localize the REKS active orbitals by minimizing the square of their absolute overlap
+             2.....delocalize the REKS active orbitals
+
+The relaxed density is calculated by default, when the analytic gradient calculation is invoked; runtyp=gradient or runtyp=optimize. If runtyp=energy, the relaxed density matrix of the target state can be calculated by
+
+ rlxDen    = yes/no....to do/or not to do the relaxed density matrix for the target state
+ 
+Calculation of the ionization energies and the respective Dyson orbitals is controlled by the following keywords:
+
+ rexEKT    = yes/no....to compute/not to compute the IPs from the Extended Koopmans' Theorem; default = no
+
+The following keyword can be used in combination with rexEKT to calculate the electron affinities
+ 
+ EKTEA     = yes/no....to compute/not to compute the EAs from the Extended Koopmans' Theorem; default = no
+
+These keywords are used to control the CP-REKS computation. CP-REKS obtains the orbital response (in the form of the Z-vector), which is needed for the analytic gradient, relaxed density matrix, and the EKS energies.
+
+ rexCG     = yes/no....to use conjugate gradient/direct matrix inversion for solving CP-REKS equations; default = yes
+
+ rxCGit    = N....max number of CG iterations; default = 100
+
+ rxCGth    = float....convergence criterion for CG; default = 0.000001
+
+The default CP-REKS convergence criterion (0.000001) provides for the analytic gradients, which are exact up to fifth or sixth digit. If more accurate gradients are required, the criterion can be decreased to 0.0000001. Finer criteria may require more CP-REKS iterations, however hardly affect the accuracy of the computed gradient.
+
+The REKS output:
+
+Generally the REKS output is similar to an SCF output. The differences are the following:
+
+During the SCF iterations the following information is reported:
+
+ ====================================================================================================================
+
+ ITER EX     NR/2           TOTAL ENERGY    OFFDIAG FOCK      E CHANGE    DENSITY CHANGE  DIIS ERROR     VIR. SHIFT
+
+ ====================================================================================================================
+   1  0   0.602257551      -78.2672692323   0.001142168   -78.2672692323   0.000943561   0.000000000     0.300000000
+   2  1   0.602059530      -78.2672958088   0.000462067    -0.0000265766   0.000535339   0.000000000     0.300000000
+   3  2   0.602003714      -78.2673013806   0.000316234    -0.0000055717   0.000371568   0.000000000     0.300000000
+.....................................................................................................................
+.....................................................................................................................
+  23 22   0.602001670      -78.2673044126   0.000001411    -0.0000000000   0.000000922   0.000000000     0.300000000
+  24 23   0.602001743      -78.2673044127   0.000001155    -0.0000000000   0.000000725   0.000000000     0.300000000
+
+          -----------------
+          DENSITY CONVERGED
+          -----------------
+     TIME TO FORM FOCK OPERATORS=       0.6 SECONDS (       0.0 SEC/ITER)
+     TIME TO SOLVE SCF EQUATIONS=       0.0 SECONDS (       0.0 SEC/ITER)
+
+ FINAL SA-REKS(2,2)-BHHLYP ENERGY IS      -78.2673044127 AFTER  24 ITERATIONS
+ SA-REKS(2,2)-BHHLYP:  FON(  8)=1.20400349 FON(  9)=0.79599651
+
+ ====================================================================================================================
+
+  SA: final printout
+
+ ==============================================================
+
+ Triplet:...............................      -78.338296401100
+ Doubly excited singlet (DES):..........      -78.193048697566
+ Open Shell Singlet (OSS):..............      -78.198436057138
+ Perfectly Paired Singlet (PPS):........      -78.336172768187
+
+ Lagrangian Wrs:........................       -0.009374829317
+
+  SA: the averaged state is reported
+
+  SA: final energy =      -78.267304412662
+
+  SA: transition dipole between the OSS and PPS states
+        Dipole = ( -0.09468334, -0.20302895, -0.70896273); |D| =  0.74351452 Debye
+
+ ====================================================================================================================
+
+Most of the reported numbers are self-explanatory. For exceptionally smart, the FINAL SA-REKS(2,2)-BHHLYP ENERGY is the final energy of the averaged state. The FONs are the fractional occupation numbers of the active orbitals; there are 2 such orbitals. The Triplet, DES, OSS, PPS energies are the energies of the triplet state, doubly excited singlet state, open-shell singlet state, the perfectly spin-paired singlet state calculated using the optimized SA-REKS orbitals and the FONs (for DES and PPS). In the triplet state, the active orbitals are occupied with the spin-up (i.e., α) electrons. The transition dipole is the transition dipole between the PPS and the OSS states. The Lagrangian Wrs is the Lagrangian matrix element between the active orbitals. No, it is non-zero in the open-shell SCF methods; may eventually vanish due to the symmetry.
+
+The SSR calculation reports some more information. For example, for the same molecule (make an educated guess) the following lines appear in the output file after the Lagrangian line:
+
+ ==================================================================================
+ 3SI-2SA-REKS(2,2)-BHHLYP states:
+                       E_k               C_{PPS}         C_{OSS}         C_{DES}
+ ----------------------------------------------------------------------------------
+ SSR state 0      -78.336199986385     -0.99989739     -0.01420509     -0.00185074
+ SSR state 1      -78.214569352312      0.01194721     -0.75564298     -0.65487476
+ SSR state 2      -78.176888216893      0.00790406     -0.65482968      0.75573515
+ ----------------------------------------------------------------------------------
+
+ SSR: the ground state is reported
+ SSR: unrelaxed occupation numbers:  FON(  8)=1.20579413 FON(  9)=0.79420587
+
+ SSR: final energy =      -78.336199986385
+
+ SSR: transition dipole between the S1 and S0 states
+        Dipole = ( -0.08125385, -0.17450835, -0.60891702); |D| =  0.63861983 Debye
+
+ ====================================================================================================================
+
+This was an SSR(3,2) calculation. The energies of the three states are given in the table format. Typically, only the S0 and S1 energies are to be used. In each line of the table, the numbers after the energy value give the coefficients of the respective configurations (PPS, OSS, DES) in the respective SSR state. 
+
+After solving the SCF and the SSR secular equations, only the unrelaxed density matrix and the unrelaxed FONs are available. The relaxed density matrix (and the relaxed FONs) requires solving the CP-REKS equations and it becomes available after the CP-REKS section of the output. An example:
+
+ ==> Solving CP-REKS equations
+ ==> for SSR32 state S0
+ ==> Memory required for CP-REKS is    515110 words
+ Solving CP-REKS equations by CG method
+ convergence threshold    0.000001000000 within maximum of   100 iterations
+ ====> Search for Z-vector guess in the input file.
+ ====> Z-vector found in the input file. Read as a guess.
+ CG: iteration     0, residue    0.003997135930
+ CG: iteration     1, residue    0.003303471349
+ CG: iteration     2, residue    0.000965987510
+ CG: iteration     3, residue    0.000293042567
+ CG: iteration     4, residue    0.000138157639
+ CG: iteration     5, residue    0.000033103894
+ CG: iteration     6, residue    0.000012019543
+ CG: iteration     7, residue    0.000003573194
+ CG: iteration     8, residue    0.000001443686
+ CG: iteration     9, residue    0.000000376722
+ CG: Residue (    0.000000376722) is less than the threshold (    0.000001000000)
+
+ ==> CP-REKS done
+
+The relaxed occupation numbers are printed only when the EKT calculation is requested. Example:
+
+ SSR: relaxed occupation numbers:  FON(  8)=1.16274571 FON(  9)=0.81971186
+
+ Extended Koopmans' Theorem for Ionization Energies
+
+ ==> EKT: there are   9 Dyson's orbitals with non-zero strengths
+
+          ----------------------------------------------
+            EKT orbitals, energies, and pole strengths
+          ----------------------------------------------
+
+                      1          2          3          4          5
+     ENERGY     -10.632402 -10.613955  -0.801197  -0.672061  -0.526661
+     STRENGTH     1.000000   1.000000   0.999954   0.999945   0.999161
+                     A          A          A          A          A   
+    1  C  1  S    0.994153  -0.004312  -0.106364  -0.161461  -0.024532
+    2  C  1  S    0.038580  -0.000067   0.205788   0.321172   0.050538
+    3  C  1  X   -0.000146  -0.000017  -0.033281  -0.033301   0.051425
+    4  C  1  Y   -0.000057  -0.000031  -0.010352   0.021109   0.076615
+    5  C  1  Z   -0.000016   0.000037  -0.053451   0.089955   0.089309
+    6  C  1  S   -0.009647   0.002203   0.194890   0.352609   0.063799
+    7  C  1  X    0.000739  -0.000270  -0.012144  -0.009870   0.032084
+    8  C  1  Y    0.000072  -0.000098  -0.003239   0.005316   0.043842
+    9  C  1  Z    0.000313  -0.001517  -0.010751   0.040195   0.039508
+   10  C  1 XX   -0.006140  -0.000095  -0.000146   0.007445   0.002667
+   11  C  1 YY   -0.006184  -0.000132  -0.007308  -0.009427  -0.002450
+   12  C  1 ZZ   -0.006283  -0.000291   0.010781  -0.001851   0.000039
+   ...................................................................
+
+The EKT output is similar to the usual MO output, except that the Dyson orbitals norms are reported as the STRENGTH(s) of the respective ionizations. In the states with fractionally occupied orbitals, the norms become fractional. After the CP-REKS calculation, the subsequent density matrix analysis (e.g., the Mulliken charges) employs the relaxed density matrix.
+
+
