@@ -2,9 +2,6 @@
 title: "1. Introduction to our CyberInfrastructure. Setups and key links."
 ---
 
- [Start here](../files/Alexey_Akimov/Intro-June12.pdf)
-
-
 <a name="toc"></a>
 # Overview of the UB CyberInfrastructure
 
@@ -17,6 +14,19 @@ title: "1. Introduction to our CyberInfrastructure. Setups and key links."
 6. [Running interactive jobs: OnDemand Cluster Desktop](#cluster-desktop)
 7. [Running interactive jobs: OnDemand Shell](#cluster-shell)
 8. [Useful References and Slidesets](#references)
+
+
+
+ [Start here](../files/Alexey_Akimov/Intro-June12.pdf)
+
+## Videorecordings
+
+ <iframe src="https://ub.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=55a5043f-06df-47da-91b7-b01f0121a81e
+&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&interactivity=all" height="900" width="800" 
+style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+
+
 
 <a name="ubvpn"></a>
 ## 0.  Set up and verify UBVPN and CCR access

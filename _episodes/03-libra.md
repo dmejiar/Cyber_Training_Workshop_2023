@@ -88,12 +88,15 @@ environment, install all needed dependencies and packages, and build and install
   * [ML Derivatives](https://github.com/compchem-cybertraining/Tutorials_Libra/blob/master/9_machine_learning/2_ann_derivatives/tutorial.ipynb)
   * [CP2K input preparation](https://github.com/compchem-cybertraining/Tutorials_Libra/tree/master/11_program_specific_methods/3_cp2k_methods/1_input_generator/tutorial.ipynb)
   * [QE: pdos, statistics, normal modes](https://github.com/compchem-cybertraining/Tutorials_Libra/tree/master/11_program_specific_methods/2_qe_methods)
+  * [Extended Huckel Theory: electronic structure, orbitals, and pDOS](https://github.com/compchem-cybertraining/Tutorials_Libra/tree/master/5_electronic_structure/1_eht/1_compact/tutorial.ipynb)
 
 
 <a name="1.3"></a>
 ### 1.3. Videorecording of the session
 
-  To be Added 
+<iframe src="https://ub.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=f3181766-b927-4cae-9bd4-b01f0121de1c
+&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&interactivity=all" height="900" width="800" 
+style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
 
 
 <a name="2"></a>[Back to TOC](#toc)
@@ -117,7 +120,14 @@ We will be working with these examples:
 <a name="2.3"></a>
 ### 2.3. Videorecording of the session
 
-  To be added 
+<iframe src="https://ub.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=5ef94ff1-b952-432e-967a-b01f016d9b71
+&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&interactivity=all" height="900" width="800" 
+style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+
+<iframe src="https://ub.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=c4805c09-e38a-4d95-87a2-b01f011d9684
+&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&interactivity=all" height="900" width="800" 
+style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
 
 
 <a name="3"></a>[Back to TOC](#toc)
@@ -153,14 +163,30 @@ We will be working with these examples:
 <a name="3.6"></a>
 ### 3.6. Videorecording of the session
 
-  To be added 
+<iframe src="https://ub.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=4036db20-1374-4890-aeb2-b02001241b95
+&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&interactivity=all" height="900" width="800" 
+style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+
+<iframe src="https://ub.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=08d5b3a2-7729-49ce-8bb9-b01f012ccea9
+&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&interactivity=all" height="900" width="800" 
+style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+
+<iframe src="https://ub.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=67c70549-f7af-42df-a9e6-b02001640b57
+&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&interactivity=all" height="900" width="800" 
+style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+
 
 
 <a name="4"></a>[Back to TOC](#toc)
 ## 4. NA-MD for atomistic systems, June 13, afternoon (Mohammad Shakiba)
 
- To be added 
 
+<iframe src="https://ub.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=59a812ef-0352-4743-a204-b02001645022
+&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&interactivity=all" height="900" width="800" 
+style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
 
 
 <a name="5"></a>
