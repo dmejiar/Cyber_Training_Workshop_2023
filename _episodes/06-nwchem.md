@@ -28,16 +28,15 @@ title: "6. NWChem"
 
 
 <a name="1.1"></a>
-### 1.1. Installation
+### 1.1. Installation Using a Package Manager
 An NWChem installation is available to all participants with access to UB CCR. 
 The appropriate environment can be initialized by executing
 ```bash
 eval "$(/projects/academic/cyberwksp21/Software/nwchem_conda0/bin/conda shell.bash hook)"
 ```
 in a bash shell. In order to verify that the environment has been properly loaded,
-the following output should be obtained by the `which nwchem` command:
+check the output of the `which nwchem` command which should be :
 ```bash
-$ which nwchem
 /projects/academic/cyberwksp21/Software/nwchem_conda0/bin/nwchem
 ```
 
@@ -72,12 +71,12 @@ brew install nwchem
 ```
 
 <a name="1.2"></a>
-### Building from Source
+### 1.2 Building from Source
 The following set of instructions will result in an optimized NWChem binary
 suitable for multi-node runs in UB CCR. Keep in mind that compiling NWChem from source 
 can be a lengthy process.
 
-#### Downloading NWChem source
+#### 1.2.1 Downloading NWChem source
 The first step is to download the NWChem source. Here, we will download the
 `master` branch into the user's home directory
 ```bash
@@ -85,7 +84,7 @@ cd ~
 git clone --depth=1 https://github.com/nwchemgit/nwchem.git
 ```
 
-#### Setting Environment
+#### 1.2.2 Setting Environment
 We will start by setting the **mandatory** variables
 ```bash
 export NWCHEM_TOP=$HOME/nwchem
@@ -160,7 +159,7 @@ export BLASOPT="-L${MKLROOT}/lib/intel64 -lmkl_intel_ilp64 -lmkl_intel_thread -l
 export LAPACK_LIB=${BLASOPT}
 ```
 
-#### Compiling
+#### 1.2.3 Compiling
 ```bash
 cd ${NWCHEM_TOP}/src
 make nwchem_config
@@ -169,6 +168,44 @@ make -j12 &> make.log &
 
 More information about how to obtain and compile NWChem can be found on 
 the [NWChem website](https://nwchemgit.github.io/Download). 
+
+
+### 1.3 Running NWChem @ UB CCR
+
+#### 1.3.1 Installation from conda
+```bash
+#!/bin/bash
+#SBATCH --account=cyberwksp21
+#SBATCH --partition=valhalla  --qos=valhalla
+#SBATCH --clusters=faculty
+#SBATCH -N 1
+#SBATCH --ntasks-per-node=24
+#SBATCH -C CPU-E5-2650v4
+eval "$(/projects/academic/cyberwksp21/Software/nwchem_conda0/bin/conda shell.bash hook)"
+mpirun -n ${SLURM_NTASKS} nwchem siosi3
+```
+
+#### 1.3.2 Installation from source
+```bash
+#!/bin/bash
+#SBATCH --account=cyberwksp21
+#SBATCH --partition=valhalla  --qos=valhalla
+#SBATCH --clusters=faculty
+#SBATCH -N 1
+#SBATCH --ntasks-per-node=24
+#SBATCH --cpus-per-task=1
+#SBATCH -C CPU-E5-2650v4
+module load openmpi/4.0.4
+module load gcc/11.2.0
+module load intel-oneapi-mkl
+
+export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
+
+mpirun -n ${SLURM_NTASKS} --bind-to core \
+       --map-by socket:pe=${OMP_NUM_THREADS} \
+       --rank-by core \
+       ${NWCHEM_TOP}/bin/LINUX64/nwchem siosi3
+```
 
 <a name="2"></a>[Back to TOC](#toc)
 ## 2. Introduction to NWChem
