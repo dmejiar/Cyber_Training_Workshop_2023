@@ -69,7 +69,103 @@ bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/mas
 brew install nwchem
 ```
 
-More information about how to obtain NWChem can be found on 
+<a name="1.1.1"></a>
+#### Compilation from source
+The following set of instructions will result in an optimized NWChem binary
+suitable for multi-node runs in UB CCR. Keep in mind that compiling NWChem from source 
+can be a lengthy process.
+
+##### Downloading NWChem source
+The first step is to download the NWChem source. Here, we will download the
+`master` branch into the user's home directory
+```bash
+cd ~
+git clone --depth=1 https://github.com/nwchemgit/nwchem.git
+```
+
+##### Setting Environment
+We will start by setting the *mandatory* variables
+```bash
+export NWCHEM_TOP=$HOME/nwchem
+export NWCHEM_TARGET=LINUX64
+export NWCHEM_MODULES="all xtb"
+export ARMCI_NETWORK=MPI-PR
+export USE_MPI=1
+```
+The use of `ARMCI_NETWORK=MPI-PR` is recommended for best performance
+as it reserves one MPI task per node for communication purposes.
+`NWCHEM_MODULES="all xtb"` will compile all modules available in NWChem plus
+an interface to the [TBlite](https://tblite.readthedocs.io/) library that 
+enables xTB GFN1 and GFN2 calculations.
+
+Next, we will define the *optional* variables
+```bash
+export USE_TBLITE=1
+export USE_OPENMP=1
+export USE_SIMINT=1
+export SIMINT_MAXAM=5
+export BUILD_LIBXC=1
+export BUILD_PLUMED=1
+export BUILD_SCALAPACK=1
+export BUILD_ELPA=1
+```
+The variable `USE_TBLITE` must be set if `xtb` is present in `NWCHEM_MODULES`. 
+Setting `USE_OPENMP=1` enables the use of OpenMP multithreading in some
+modules.
+Setting `USE_SIMINT=1` instructs NWChem to download and compile the 
+[SIMINT](https://www.bennyp.org/research/simint/) library
+supporting up to `h`-type functions (`SIMINT_MAXAM=5`).
+Setting `BUILD_LIBXC=1` instructs NWChem to download and compile the
+latest release version of LibXC.
+Setting `BUILD_PLUMED=1` instructs NWChem to download and compile the
+[PLUMED](https://www.plumed.org/) library to use enhanced-sampling 
+algorithms in the Gaussian-basis AIMD module of NWChem.
+Setting `BUILD_SCALAPACK=1` instructs NWChem to download and compile the
+reference [ScaLAPACK](https://github.com/Reference-ScaLAPACK/scalapack) library.
+Setting `BUILD_ELPA=1` instructs NWChem to download en compile the 
+[ELPA](https://gitlab.mpcdf.mpg.de/elpa/elpa) eigensolver.
+
+Finally, we need to load the desired compiler, MPI, and BLAS/LAPACK libraries. A common 
+choice is the use the GNU compilers in combination with OpenMPI and Intel MKL
+```bash
+module load openmpi/4.0.4
+module load gcc/11.2.0
+module load intel-oneapi-mkl
+module load cmake/3.22.3
+
+export FC=gfortran
+export CC=gcc
+export CXX=g++
+export BLAS_SIZE=8
+export SCALAPACK_SIZE=${BLAS_SIZE}
+export BLASOPT="-L${MKLROOT}/lib/intel64 -lmkl_gf_ilp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -lm -ldl"
+export LAPACK_LIB=${BLASOPT}
+```
+
+If Intel compilers are chosen, then one can load the OneAPI components instead
+```bash
+module load intel-oneapi-compilers
+module load intel-oneapi-mpi
+module load intel-oneapi-mkl
+module load cmake/3.22.3
+
+export FC=ifort
+export CC=icc
+export CXX=icpc
+export BLAS_SIZE=8
+export SCALAPACK_SIZE=${BLAS_SIZE}
+export BLASOPT="-L${MKLROOT}/lib/intel64 -lmkl_intel_ilp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm -ldl"
+export LAPACK_LIB=${BLASOPT}
+```
+
+##### Compiling
+```bash
+cd ${NWCHEM_TOP}/src
+make nwchem_config
+make -j12 &> make.log &
+```
+
+More information about how to obtain and compile NWChem can be found on 
 the [NWChem website](https://nwchemgit.github.io/Download). 
 
 <a name="2"></a>[Back to TOC](#toc)
