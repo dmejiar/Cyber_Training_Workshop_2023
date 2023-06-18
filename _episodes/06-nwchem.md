@@ -6,7 +6,9 @@ title: "6. NWChem"
 # Table of Content
 1. [Generalities](#1) **June 20, morning**
 
-    1.1 [Installation](#1.1)
+    1.1 [Installation using a Package Manager](#1.1)
+
+    1.2 [Building from Source](#1.2)
 
 2. [Introduction to NWChem](#2) **June 20, morning**
 
@@ -69,13 +71,13 @@ bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/mas
 brew install nwchem
 ```
 
-<a name="1.1.1"></a>
-#### Compilation from source
+<a name="1.2"></a>
+### Building from Source
 The following set of instructions will result in an optimized NWChem binary
 suitable for multi-node runs in UB CCR. Keep in mind that compiling NWChem from source 
 can be a lengthy process.
 
-##### Downloading NWChem source
+#### Downloading NWChem source
 The first step is to download the NWChem source. Here, we will download the
 `master` branch into the user's home directory
 ```bash
@@ -83,8 +85,8 @@ cd ~
 git clone --depth=1 https://github.com/nwchemgit/nwchem.git
 ```
 
-##### Setting Environment
-We will start by setting the *mandatory* variables
+#### Setting Environment
+We will start by setting the **mandatory** variables
 ```bash
 export NWCHEM_TOP=$HOME/nwchem
 export NWCHEM_TARGET=LINUX64
@@ -98,7 +100,7 @@ as it reserves one MPI task per node for communication purposes.
 an interface to the [TBlite](https://tblite.readthedocs.io/) library that 
 enables xTB GFN1 and GFN2 calculations.
 
-Next, we will define the *optional* variables
+Next, we will define the **optional** variables
 ```bash
 export USE_TBLITE=1
 export USE_OPENMP=1
@@ -158,7 +160,7 @@ export BLASOPT="-L${MKLROOT}/lib/intel64 -lmkl_intel_ilp64 -lmkl_intel_thread -l
 export LAPACK_LIB=${BLASOPT}
 ```
 
-##### Compiling
+#### Compiling
 ```bash
 cd ${NWCHEM_TOP}/src
 make nwchem_config
