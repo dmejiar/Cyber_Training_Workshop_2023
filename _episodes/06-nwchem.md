@@ -201,10 +201,8 @@ module load intel-oneapi-mkl
 
 export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
 
-mpirun -n ${SLURM_NTASKS} --bind-to core \
-       --map-by socket:pe=${OMP_NUM_THREADS} \
-       --rank-by core \
-       ${NWCHEM_TOP}/bin/LINUX64/nwchem siosi3
+srun --mpi=pmi2 --cpu-bind core \
+       ${NWCHEM_TOP}/bin/LINUX64/nwchem [input]
 ```
 
 <a name="2"></a>[Back to TOC](#toc)
