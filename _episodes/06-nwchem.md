@@ -233,17 +233,19 @@ mpirun -n ${SLURM_NTASKS} nwchem [input]
 #SBATCH --partition=valhalla  --qos=valhalla
 #SBATCH --clusters=faculty
 #SBATCH -N 1
-#SBATCH --ntasks-per-node=24
+#SBATCH --ntasks-per-node=12
 #SBATCH --cpus-per-task=1
-#SBATCH -C CPU-E5-2650v4
+#SBATCH -C CPU-E5-2620v3
+
 module load gcc/11.2.0
 module load openmpi/4.1.1
 module load imkl/2022.0.1
 export LD_LIBRARY_PATH=${LIBRARY_PATH}:${CMAKE_LIBRARY_PATH}
 
 export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
+export NWCHEM_TOP=$HOME/nwchem
 
-srun --mpi=pmix_v4 --cpu-bind core \
+srun --mpi=pmi2 --cpu-bind core \
        ${NWCHEM_TOP}/bin/LINUX64/nwchem [input]
 ```
 
